@@ -173,20 +173,10 @@ module.exports.or = function () {
  * @returns {Function}
  */
 module.exports.and = function () {
-    // Получаем все аргументы
-    var toIntersect = [].slice.apply(arguments);
     return function (collection) {
         var changedCollection = collection;
-        var tmpArr = [];
-        for (var elem = 0; elem < toIntersect.length; ++elem) {
-            var partOfCollection = toIntersect[elem](collection);
-            for (var i in partOfCollection) {
-                tmpArr.push(partOfCollection[i]);
-            }
-            changedCollection = changedCollection.filter(function (value) {
-                return tmpArr.indexOf(value) > -1;
-            });
-            tmpArr = [];
+        for (var i = 1; i < arguments.length; i++) {
+            changedCollection = arguments[i](changedCollection);
         }
         return changedCollection;
     };
